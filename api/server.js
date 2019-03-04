@@ -6,6 +6,8 @@ const userRoutes = require('./router/user.route');
 const roleRoutes = require('./router/role.route');
 const database = require('./config/database');
 
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
 
 const app = express();
 
@@ -13,6 +15,8 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 // parse application/json
 app.use(bodyParser.json());
+// add swagger
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // add auth rest endpoints
 authRoutes(app);

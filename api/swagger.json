@@ -1,0 +1,218 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "0.0.1",
+    "title": "TheMovieJS"
+  },
+  "host": "localhost:8080",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "movie",
+      "description": "Everything about your Movie",
+      "externalDocs": {
+        "description": "Find out more",
+        "url": "http://swagger.io"
+      }
+    }
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/movie": {
+      "x-swagger-router-controller": "movie",
+      "get": {
+        "tags": [
+          "movie"
+        ],
+        "operationId": "getAll",
+        "description": "get the movies list",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Movie"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/movie/{id}": {
+      "x-swagger-router-controller": "movie",
+      "get": {
+        "tags": [
+          "movie"
+        ],
+        "operationId": "getOne",
+        "description": "get a movie",
+        "parameters": [
+          {
+            "name": "id",
+            "type": "integer",
+            "format": "int64",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Movie"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/swagger": {
+      "x-swagger-pipe": "swagger_raw"
+    }
+  },
+  "definitions": {
+    "Movie": {
+      "type": "object",
+      "properties": {
+        "adult": {
+          "type": "boolean",
+          "description": "if requires a certain age"
+        },
+        "backdrop_path": {
+          "type": "string",
+          "description": "backdrop image"
+        },
+        "budget": {
+          "type": "integer",
+          "description": "movie budget"
+        },
+        "original_language": {
+          "type": "string"
+        },
+        "original_title": {
+          "type": "string"
+        },
+        "overview": {
+          "type": "string"
+        },
+        "release_date": {
+          "type": "string"
+        },
+        "revenue": {
+          "type": "string"
+        },
+        "runtime": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "Rumoured",
+            "Planned",
+            "In Production",
+            "Post Production",
+            "Released",
+            "Canceled"
+          ]
+        },
+        "title": {
+          "type": "string"
+        },
+        "vote_average": {
+          "type": "number"
+        },
+        "vote_count": {
+          "type": "integer"
+        },
+        "video": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "iso_639_1": {
+              "type": "string"
+            },
+            "iso_3166_1": {
+              "type": "string"
+            },
+            "key": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "site": {
+              "type": "string"
+            },
+            "size": {
+              "type": "integer"
+            },
+            "type": {
+              "type": "string"
+            }
+          }
+        },
+        "genre": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "name": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "items": {
+        "type": "integer"
+      }
+    },
+    "GeneralResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "number",
+          "description": "returns 1 if successful"
+        },
+        "description": {
+          "type": "string",
+          "description": "a short comment"
+        }
+      },
+      "required": [
+        "success",
+        "description"
+      ]
+    },
+    "ErrorResponse": {
+      "required": [
+        "message"
+      ],
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
