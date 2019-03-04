@@ -10,7 +10,4 @@ addons:
 cache:
   directories:
     - node_modules
-before_script:
-  - cd api
-script:
-  - npm install
+before_script: cd api
