@@ -1,0 +1,33 @@
+version: "3"
+services:
+  api:
+    image: 'node:latest'
+    container_name: api
+    restart: always
+    volumes:
+        - './api:/home/node/app'
+    working_dir: /home/node/app
+    command:
+        - '/bin/sh'
+        - '-c'
+        - 'npm install && npm start'
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongo
+    links:
+      - mongo
+  mongo:
+    container_name: mongo
+    image: mongo
+    volumes:
+      - ./database:/data/db
+    ports:
+      - "27017:27017"
+  mongoclient:
+    image: mongoclient/mongoclient:latest
+    container_name: mongoclient
+    depends_on:
+      - mongo
+    ports:
+      - "3300:3000"
