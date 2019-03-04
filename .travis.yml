@@ -15,4 +15,5 @@ before_script:
 script:
   - npm install
 after_success:
-  - $TRAVIS_BRANCH == "master" && sshpass -p $DEPLOY_PASS ssh -o stricthostkeychecking=no $DEPLOY_USER@$DEPLOY_HOST bash $DEPLOY_PATH/deploy.sh
+  - test $TRAVIS_BRANCH == "master" && ember build
+  - sshpass -p $DEPLOY_PASS ssh -o stricthostkeychecking=no $DEPLOY_USER@$DEPLOY_HOST bash $DEPLOY_PATH/deploy.sh
