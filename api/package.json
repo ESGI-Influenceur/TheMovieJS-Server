@@ -1,7 +1,7 @@
 {
-  "name": "nodejs-jwt-auth",
+  "name": "nodejs-jwt",
   "version": "1.0.0",
-  "description": "Nodejs-JWT-Authentication-with-MongoDB-Sequelize-ORM",
+  "description": "Nodejs-JWT-Authentication-with-MongoDB",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -14,7 +14,7 @@
     "MongoDB",
     "Authentication"
   ],
-  "author": "grokonez.com",
+  "author": "nadjim",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",

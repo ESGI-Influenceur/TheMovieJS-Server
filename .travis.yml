@@ -11,6 +11,4 @@ cache:
   directories:
     - node_modules
 before_script:
-    - cd api
-    - echo "$(pwd)"
-    - npm i
+    - cd api && npm install
