@@ -12,5 +12,5 @@ cache:
     - node_modules
 before_script:
     - cd api
-    - echo pwd
+    - echo "$(pwd)"
     - npm i
