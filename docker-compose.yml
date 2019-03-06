@@ -20,6 +20,8 @@ services:
   mongo:
     container_name: mongo
     image: mongo
+    logging:
+        driver: none
     volumes:
       - ./database:/data/db
     ports:
@@ -27,6 +29,8 @@ services:
   mongoclient:
     image: mongoclient/mongoclient:latest
     container_name: mongoclient
+    logging:
+        driver: none
     depends_on:
       - mongo
     ports:
