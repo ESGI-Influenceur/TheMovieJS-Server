@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const MovieSchema = mongoose.Schema({
+const SerialSchema = mongoose.Schema({
     id: Number,
     adult: Boolean,
     backdrop_path: String,
@@ -15,10 +15,6 @@ const MovieSchema = mongoose.Schema({
     vote_average: Number,
     vote_count: Number,
     comments:[{ type: mongoose.Schema.Types.ObjectId, ref: 'Comments' }]
-});
-
-MovieSchema.index({
-    title: 'text'
 });
 
 MovieSchema.methods.toJSON = function() {

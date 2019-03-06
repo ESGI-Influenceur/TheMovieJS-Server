@@ -35,3 +35,17 @@ exports.findOne = (req, res) => {
         });
     });
 };
+
+// Search movie
+exports.search = (req, res) => {
+    Movie.find({ $text: { $search: req.query.query } })
+        .limit(10)
+        .populate('genre',{_id : 0,__v:0})
+        .then(movies => {
+            res.send(movies);
+        }).catch(err => {
+        res.status(500).send({
+            message: err.message || "Some error occurred while retrieving movies."
+        });
+    });
+};

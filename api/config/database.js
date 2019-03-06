@@ -11,9 +11,9 @@ const axios = require('axios');
 async function initial(){
 
 
-    console.log("###################");
+    console.log("######################################");
     console.log("ADMIN INIT");
-    console.log("###################");
+    console.log("######################################");
 
     await Role.countDocuments( (err, count) => {
         if(!err && count === 0) {
@@ -83,13 +83,13 @@ async function initial(){
 
 async function getAllMovie(){
 
-    console.log("###################");
+    console.log("######################################");
     console.log("MOVIES DOWNLOAD");
-    console.log("###################");
+    console.log("######################################");
 
     let i = 1 ;
 
-    for (i ; i < 3 ; i++){
+    for (i ; i < 4 ; i++){
 
         console.log("page : "+i);
 
@@ -158,9 +158,9 @@ async function insertVideo(movie) {
 
 async function getAllGenre() {
 
-    console.log("###################");
+    console.log("######################################");
     console.log("GENRE DOWNLOAD");
-    console.log("###################");
+    console.log("######################################");
 
     let genreMovie = new Promise((resolve) => {
         axios.get('https://api.themoviedb.org/3/genre/movie/list?api_key=3942737097dcd29145fe000304ac2294&language=fr-FR')
@@ -223,7 +223,7 @@ const database = () => {
     console.log("MongoDB url : %s",env.database);
     mongoose.Promise = global.Promise;
 
-    mongoose.connect(env.database,{ useNewUrlParser: true })
+    mongoose.connect(env.database,{ useNewUrlParser: true,useCreateIndex: true })
         .then(() => {
             console.log("Successfully connected to MongoDB.");
             initial().then(() => {

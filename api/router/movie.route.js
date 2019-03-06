@@ -8,4 +8,8 @@ module.exports = (app) => {
 
     // Retrieve a single Note with moviesId
     app.get('/api/movies/:moviesId', controller.findOne);
+
+    // Search movies
+    app.get('/api/search', controller.search);
+
 };
