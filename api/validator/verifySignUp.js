@@ -36,17 +36,15 @@ checkDuplicateUserNameOrEmail = (req, res, next) => {
 			next();
 		});
 	});
-}
+};
 
-checkRolesExisted = (req, res, next) => {	
-	for(let i=0; i<req.body.roles.length; i++){
-		if(!Roles.includes(req.body.roles[i].toUpperCase())){
-			res.status(400).send("Fail -> Does NOT exist Role = " + req.body.roles[i]);
-			return;
-		}
-	}
+checkRolesExisted = (req, res, next) => {
+    if(req.body.roles){
+        return res.status(400).send("Fail -> Role cannot be set" + req.body.roles[i]);
+    }
+
 	next();
-}
+};
 
 const signUpVerify = {};
 signUpVerify.checkDuplicateUserNameOrEmail = checkDuplicateUserNameOrEmail;

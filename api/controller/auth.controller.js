@@ -25,8 +25,9 @@ exports.signin = (req, res) => {
                     return res.status(401).send({ auth: false, accessToken: null, reason: "Invalid Password!" });
                 }
 
-                let token = jwt.sign({ id: user._id }, config.secret, {
-                    expiresIn: 86400 // expires in 24 hours
+                let token = jwt.sign({ id: user._id, username : user.username, email : user.email, roles : user.roles }, config.secret, {
+                   // expiresIn: 86400 // expires in 24 hours
+                    expiresIn: 120
                 });
 
                 return res.status(200).send({ token: token });
@@ -42,7 +43,16 @@ exports.signin = (req, res) => {
 
 };
 
-exports.signup = (req, res) => {
+exports.signup = async (req, res) => {
+    let userRole = null;
+    await Role.findOne({name:'USER'})
+        .then(res => {
+            if(res){
+                userRole = res;
+            }else {
+                return res.status(500).send({ reason: "User role missing" });
+            }
+        });
 
 	// Save User to Database
 	console.log("Processing func -> SignUp");
@@ -51,17 +61,17 @@ exports.signup = (req, res) => {
 		name: req.body.name,
 		username: req.body.username,
 		email: req.body.email,
-		password: bcrypt.hashSync(req.body.password, 8)
-	});
-
-    // Save a User to the MongoDB
-    user.save()
+		password: bcrypt.hashSync(req.body.password, 8),
+        roles : [userRole._id]
+	}).save()
         .then(res => {
-
+            return res.status(201).send({ success: user.username+" created" });
         })
         .catch(err => {
-            res.status(500).send({ reason: err.message });
+            return res.status(500).send({ reason: err.message });
         });
+
+
 
 };
 
