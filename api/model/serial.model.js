@@ -2,22 +2,21 @@ const mongoose = require('mongoose');
 
 const SerialSchema = mongoose.Schema({
     id: Number,
-    adult: Boolean,
-    backdrop_path: String,
-    genre: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Genre' }],
+    name: String,
+    original_name: String,
+    first_air_date: String,
+    origin_country: String,
     original_language: String,
-    original_title: String,
+    genre: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Genre' }],
+    comments:[{ type: mongoose.Schema.Types.ObjectId, ref: 'Comments' }],
     overview: String,
     poster_path: String,
-    release_date: Date,
-    title: String,
-    video: String,
-    vote_average: Number,
-    vote_count: Number,
-    comments:[{ type: mongoose.Schema.Types.ObjectId, ref: 'Comments' }]
+    backdrop_path: String,
+    vote_average: Number
+
 });
 
-MovieSchema.methods.toJSON = function() {
+SerialSchema.methods.toJSON = function() {
     let obj = this.toObject();
     delete obj.__v;
     delete obj._id;
@@ -26,4 +25,4 @@ MovieSchema.methods.toJSON = function() {
 
 
 
-module.exports = mongoose.model('Movie', MovieSchema);
+module.exports = mongoose.model('Serial', SerialSchema);
