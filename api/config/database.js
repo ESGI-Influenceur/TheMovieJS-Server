@@ -4,6 +4,7 @@ const Role = require('../model/role.model');
 const User = require('../model/user.model');
 const Genre = require('../model/genre.model');
 const Movie = require('../model/movie.model');
+const Serial = require('../model/serial.model');
 const bcrypt = require('bcryptjs');
 const axios = require('axios');
 
@@ -80,6 +81,74 @@ async function initial(){
     });
 
 }
+
+
+async function getAllSerial(){
+
+    console.log("######################################");
+    console.log("SERIALS DOWNLOAD");
+    console.log("######################################");
+
+    let i = 1 ;
+
+    for (i ; i < 4 ; i++){
+
+        console.log("page : "+i);
+
+        await axios.get('https://api.themoviedb.org/3/tv/popular?api_key=3942737097dcd29145fe000304ac2294&language=fr-FR&page='+i)
+            .then(response => {
+                let serials = response.data.results;
+                return checkSerials(serials);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
+}
+
+async function checkSerials(serials) {
+    for(const serial of serials ){
+
+        await Serial.findOne({ id: serial.id })
+            .then(res => {
+                if(res) {
+                    console.log("Serial "+res.name+" already there");
+                }else {
+                    return insertSerial(serial);
+                }
+            })
+
+    }
+}
+
+async function insertSerial(serial) {
+    serial.genre = [];
+
+    for(const id of serial.genre_ids){
+        await Genre.findOne({id: id})
+            .then(res => {
+                if(res){
+                    serial.genre.push(res._id);
+                }
+            })
+    }
+    serial.backdrop_path = "https://image.tmdb.org/t/p/original"+serial.backdrop_path;
+    serial.poster_path = "https://image.tmdb.org/t/p/original"+serial.poster_path;
+
+
+    await insertVideo(serial);
+
+    return new Serial(serial).save()
+        .then(() => {
+            console.log("Serial "+serial.name+" added");
+        })
+        .catch(err => {
+            return console.error(err.stack);
+            console.log("added");
+        })
+}
+
+
 
 async function getAllMovie(){
 
@@ -229,6 +298,7 @@ const database = () => {
             initial().then(() => {
                 getAllGenre().then(()=>{
                     getAllMovie();
+                    getAllSerial();
                 });
             });
 

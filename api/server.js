@@ -5,6 +5,7 @@ const authRoutes = require('./router/auth.route');
 const userRoutes = require('./router/user.route');
 const roleRoutes = require('./router/role.route');
 const movieRoutes = require('./router/movie.route');
+const serialRoutes = require('./router/serial.route');
 const database = require('./config/database');
 const cors = require('cors');
 
@@ -28,6 +29,7 @@ authRoutes(app);
 userRoutes(app);
 roleRoutes(app);
 movieRoutes(app);
+serialRoutes(app);
 
 // connect to the mongo database
 database(app);
