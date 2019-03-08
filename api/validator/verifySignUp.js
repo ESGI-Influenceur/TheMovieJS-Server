@@ -15,7 +15,7 @@ checkDuplicateUserNameOrEmail = (req, res, next) => {
 		}
 
 		if(user){
-			res.status(400).send("Fail -> Username is already taken!");
+			res.status(400).send("Username is already taken!");
 			return;
 		}
 
@@ -29,7 +29,7 @@ checkDuplicateUserNameOrEmail = (req, res, next) => {
 			}
 	
 			if(user){
-				res.status(400).send("Fail -> Email is already in use!");
+				res.status(400).send("Email is already in use!");
 				return;
 			}
 
@@ -40,7 +40,7 @@ checkDuplicateUserNameOrEmail = (req, res, next) => {
 
 checkRolesExisted = (req, res, next) => {
     if(req.body.roles){
-        return res.status(400).send("Fail -> Role cannot be set" + req.body.roles[i]);
+        return res.status(400).send("Role cannot be set" + req.body.roles[i]);
     }
 
 	next();

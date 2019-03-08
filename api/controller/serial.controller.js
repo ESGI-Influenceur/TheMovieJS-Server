@@ -4,7 +4,9 @@ const Serial = require('../model/serial.model');
 // Retrieve and return all serials from the database.
 exports.findAll = (req, res) => {
     Serial.find()
-        .populate('genre',{_id : 0,__v:0})
+      .populate({ path: 'comments', model: 'Comment',
+                  populate: {path: 'user', model: 'User',select:'-password -roles -__v -movies -serials'}})
+      .populate('genre',{_id : 0,__v:0})
         .then(serials => {
             res.send(serials);
         }).catch(err => {
@@ -16,7 +18,11 @@ exports.findAll = (req, res) => {
 
 // Find a single serial with a serialId
 exports.findOne = (req, res) => {
-    Serial.findById(req.params.serialId)
+    Serial.findOne({id: req.params.serialsId})
+        .populate({ path: 'comments', model: 'Comment',
+                    populate: {path: 'user', model: 'User',select:'-password -roles -__v -movies -serials'}})
+        .populate('genre',{_id : 0,__v:0})
+        .lean()
         .then(serial => {
             if(!serial) {
                 return res.status(404).send({
@@ -27,11 +33,11 @@ exports.findOne = (req, res) => {
         }).catch(err => {
         if(err.kind === 'ObjectId') {
             return res.status(404).send({
-                message: "Movie not found with id " + req.params.movieId
+                message: "Movie not found with id " + req.params.serialsId
             });
         }
         return res.status(500).send({
-            message: "Error retrieving movie with id " + req.params.movieId
+            message: "Error retrieving movie with id " + req.params.serialsId
         });
     });
 };

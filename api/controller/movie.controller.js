@@ -4,7 +4,8 @@ const Movie = require('../model/movie.model.js');
 // Retrieve and return all movies from the database.
 exports.findAll = (req, res) => {
     Movie.find()
-        .populate('genre',{_id : 0,__v:0})
+      .populate({ path: 'comments', model: 'Comment',select: '-__v' ,populate: {path: 'user', model: 'User',select:'-password -roles -__v -movies -serials'}})
+      .populate('genre',{_id : 0,__v:0})
         .then(movies => {
             res.send(movies);
         }).catch(err => {
@@ -16,7 +17,11 @@ exports.findAll = (req, res) => {
 
 // Find a single movie with a movieId
 exports.findOne = (req, res) => {
-    Movie.findById(req.params.movieId)
+
+    Movie.findOne({id:req.params.moviesId})
+        .populate({ path: 'comments', model: 'Comment',select: '-__v' ,populate: {path: 'user', model: 'User',select:'-password -roles -__v -movies -serials'}})
+        .populate('genre',{_id : 0,__v:0})
+        .lean()
         .then(movie => {
             if(!movie) {
                 return res.status(404).send({

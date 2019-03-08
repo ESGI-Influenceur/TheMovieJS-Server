@@ -13,8 +13,8 @@ const MovieSchema = mongoose.Schema({
     title: String,
     video: String,
     vote_average: Number,
-    vote_count: Number,
-    comments:[{ type: mongoose.Schema.Types.ObjectId, ref: 'Comments' }]
+    comments:[{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
+    votes:[{ type: mongoose.Schema.Types.ObjectId, ref: 'Rating' }]
 });
 
 MovieSchema.index({
@@ -25,6 +25,7 @@ MovieSchema.methods.toJSON = function() {
     let obj = this.toObject();
     delete obj.__v;
     delete obj._id;
+   delete obj.votes;
     return obj;
 };
 

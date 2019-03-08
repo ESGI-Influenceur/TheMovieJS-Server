@@ -6,6 +6,8 @@ const userRoutes = require('./router/user.route');
 const roleRoutes = require('./router/role.route');
 const movieRoutes = require('./router/movie.route');
 const serialRoutes = require('./router/serial.route');
+const commentRoutes = require('./router/comment.route');
+const ratingRoutes = require('./router/rating.route');
 const database = require('./config/database');
 const cors = require('cors');
 
@@ -24,12 +26,14 @@ app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(cors({origin:'*'}));
 
 
-// add auth rest endpoints
+// add rest endpoints
 authRoutes(app);
 userRoutes(app);
 roleRoutes(app);
 movieRoutes(app);
 serialRoutes(app);
+commentRoutes(app);
+ratingRoutes(app);
 
 // connect to the mongo database
 database(app);
