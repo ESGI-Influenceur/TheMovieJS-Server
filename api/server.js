@@ -6,6 +6,7 @@ const userRoutes = require('./router/user.route');
 const roleRoutes = require('./router/role.route');
 const movieRoutes = require('./router/movie.route');
 const serialRoutes = require('./router/serial.route');
+const searchRoutes = require('./router/search.route');
 const commentRoutes = require('./router/comment.route');
 const ratingRoutes = require('./router/rating.route');
 const database = require('./config/database');
@@ -32,6 +33,7 @@ userRoutes(app);
 roleRoutes(app);
 movieRoutes(app);
 serialRoutes(app);
+searchRoutes(app);
 commentRoutes(app);
 ratingRoutes(app);
 
