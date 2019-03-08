@@ -4,8 +4,12 @@ const Movie = require('../model/movie.model.js');
 // Retrieve and return all movies from the database.
 exports.findAll = (req, res) => {
     Movie.find()
-      .populate({ path: 'comments', model: 'Comment',select: '-__v' ,populate: {path: 'user', model: 'User',select:'-password -roles -__v -movies -serials'}})
+      .populate({ path: 'comments', model: 'Comment', select :'-__v',
+        populate: {path: 'user', model: 'User',select:'-password -roles -__v -movies -serials'}})
+      .populate({ path: 'votes', model: 'Rating',select :'-__v',
+        populate: {path: 'user', model: 'User',select:'-password -roles -__v -movies -serials'}},)
       .populate('genre',{_id : 0,__v:0})
+      .lean()
         .then(movies => {
             res.send(movies);
         }).catch(err => {
@@ -19,7 +23,10 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
 
     Movie.findOne({id:req.params.moviesId})
-        .populate({ path: 'comments', model: 'Comment',select: '-__v' ,populate: {path: 'user', model: 'User',select:'-password -roles -__v -movies -serials'}})
+        .populate({ path: 'comments', model: 'Comment', select :'-__v',
+          populate: {path: 'user', model: 'User',select:'-password -roles -__v -movies -serials'}})
+        .populate({ path: 'votes', model: 'Rating',select :'-__v',
+          populate: {path: 'user', model: 'User',select:'-password -roles -__v -movies -serials'}},)
         .populate('genre',{_id : 0,__v:0})
         .lean()
         .then(movie => {
