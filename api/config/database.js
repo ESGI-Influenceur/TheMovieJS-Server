@@ -297,8 +297,9 @@ const database = () => {
             console.log("Successfully connected to MongoDB.");
             initial().then(() => {
                 getAllGenre().then(()=>{
-                    getAllMovie();
-                    getAllSerial();
+                    getAllMovie().then(() => {
+                      getAllSerial();
+                    })
                 });
             });
 

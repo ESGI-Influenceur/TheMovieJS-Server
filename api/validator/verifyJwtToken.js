@@ -5,7 +5,6 @@ const Role = require('../model/role.model.js');
 
 verifyToken = (req, res, next) => {
 
-    console.log(req.headers);
 	let token = req.headers['authorization'];
   
 	if (!token){
@@ -26,6 +25,7 @@ verifyToken = (req, res, next) => {
 		next();
 	});
 };
+
 
 isAdmin = (req, res, next) => {
 	
@@ -61,43 +61,10 @@ isAdmin = (req, res, next) => {
 	});
 };
 
-isPmOrAdmin = (req, res, next) => {
-	User.findOne({ _id: req.userId })
-	.exec((err, user) => {
-		if (err){
-			if(err.kind === 'ObjectId') {
-				return res.status(404).send({
-					message: "User not found with Username = " + req.body.username
-				});                
-			}
-			return res.status(500).send({
-				message: "Error retrieving User with Username = " + req.body.username
-			});
-		}
-		
-		Role.find({
-			'_id': { $in: user.roles }
-		}, (err, roles) => {
-			if(err) 
-				res.status(500).send("Error -> " + err);
 
-			for(let i=0; i<roles.length; i++){
-				let role = roles[i].name.toUpperCase();
-				if(role === "PM" || role === "ADMIN"){
-					next();
-					return;
-				}
-			}
-			
-			res.status(403).send("Require PM or Admin Roles!");
-			return;
-		});
-	});
-};
 
 const authJwt = {};
 authJwt.verifyToken = verifyToken;
 authJwt.isAdmin = isAdmin;
-authJwt.isPmOrAdmin = isPmOrAdmin;
 
 module.exports = authJwt;

@@ -1,14 +1,14 @@
 const mongoose = require('mongoose');
  
-const CommentSchema = mongoose.Schema({
-    content: String,
+const RatingSchema = mongoose.Schema({
+    vote: Number,
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
 });
 
-CommentSchema.methods.toJSON = function() {
+RatingSchema.methods.toJSON = function() {
     let obj = this.toObject();
     delete obj.__v;
     return obj;
 };
  
-module.exports = mongoose.model('Comment', CommentSchema);
+module.exports = mongoose.model('Rating', RatingSchema);
