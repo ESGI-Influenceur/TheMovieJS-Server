@@ -63,13 +63,15 @@ exports.signup = async (req, res) => {
 		email: req.body.email,
 		password: bcrypt.hashSync(req.body.password, 8),
         roles : [userRole._id]
-	}).save()
-        .then(res => {
-            return res.status(201).send({ success: user.username+" created" });
-        })
-        .catch(err => {
-            return res.status(500).send({ reason: err.message });
-        });
+	}).save((err,userSaved) => {
+      if(userSaved){
+        return res.status(201).send({ success: userSaved.username+" created" });
+      }else{
+
+        return res.status(500).send({ reason: err.message });
+      }
+    });
+
 
 
 
