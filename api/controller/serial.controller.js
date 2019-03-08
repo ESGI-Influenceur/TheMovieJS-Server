@@ -6,8 +6,9 @@ exports.findAll = (req, res) => {
     Serial.find()
       .populate({ path: 'comments', model: 'Comment',select :'-__v',
                   populate: {path: 'user', model: 'User',select:'-password -roles -__v -movies -serials'}},)
+      .populate({ path: 'votes', model: 'Rating',select :'-__v',
+                 populate: {path: 'user', model: 'User',select:'-password -roles -__v -movies -serials'}},)
       .populate('genre',{_id : 0,__v:0})
-      .populate({ path: 'votes', model: 'Rating', select :'-__v'})
         .then(serials => {
             res.send(serials);
         }).catch(err => {
@@ -22,7 +23,8 @@ exports.findOne = (req, res) => {
     Serial.findOne({id: req.params.serialsId})
         .populate({ path: 'comments', model: 'Comment', select :'-__v',
                     populate: {path: 'user', model: 'User',select:'-password -roles -__v -movies -serials'}})
-        .populate({ path: 'votes', model: 'Rating', select :'-__v'})
+        .populate({ path: 'votes', model: 'Rating',select :'-__v',
+                    populate: {path: 'user', model: 'User',select:'-password -roles -__v -movies -serials'}},)
         .populate('genre',{_id : 0,__v:0})
         .lean()
         .then(serial => {
