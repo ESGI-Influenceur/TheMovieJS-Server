@@ -16,6 +16,10 @@ const SerialSchema = mongoose.Schema({
 
 });
 
+SerialSchema.index({
+    name: 'text'
+});
+
 SerialSchema.methods.toJSON = function() {
     let obj = this.toObject();
     delete obj.__v;
