@@ -7,7 +7,7 @@ const Rating = require('../model/rating.model');
 
 exports.findAll = (req, res) => {
   Rating.find()
-        .populate('user',{_id : 0,__v:0})
+        .populate({ path: 'user', model: 'User'})
         .then(ratings => {
             res.send(ratings);
         }).catch(err => {
@@ -26,10 +26,15 @@ exports.rateMovie = (req, response) => {
       }).save((err,rating) => {
         Movie.findOne({id: req.params.movieId})
           .then(res => {
-            res.votes.push(rating._id);
-            res.save((err,movie) => {
-              response.status(201).send(rating);
-            });
+            comupteVoteAverage(res,rating)
+              .then(() => {
+                response.status(201).send(rating);
+              })
+              .catch(error => {
+                response.status(500).send({
+                  message: error.message
+                });
+              })
           })
           .catch(error => {
             response.status(500).send({
@@ -52,12 +57,17 @@ exports.rateSerial = (req, response) => {
         vote: req.body.vote,
         user: req.userId
       }).save((err,rating) => {
-        Serial.findOne({id: req.params.serialId})
+        Serial.findOne({id: req.params.serialId}).populate({ path: 'votes', model: 'Rating'})
           .then(res => {
-            res.votes.push(rating._id);
-            res.save((err,serial) => {
-              response.status(201).send(rating);
-            });
+            comupteVoteAverage(res,rating)
+              .then(() => {
+                response.status(201).send(rating);
+              })
+              .catch(error => {
+                response.status(500).send({
+                  message: error.message
+                });
+            })
           })
           .catch(error => {
             response.status(500).send({
@@ -72,3 +82,15 @@ exports.rateSerial = (req, response) => {
     });
   });
 };
+
+
+async function comupteVoteAverage(show,rating){
+  show.vote_average =  ( (show.vote_average * show.votes.length ) + rating.vote) / (show.votes.length + 1);
+
+  return new Promise((resolve,reject) => {
+    show.votes.push(rating._id);
+    show.save((err,show) => {
+      resolve();
+    });
+  });
+}

@@ -4,9 +4,10 @@ const Serial = require('../model/serial.model');
 // Retrieve and return all serials from the database.
 exports.findAll = (req, res) => {
     Serial.find()
-      .populate({ path: 'comments', model: 'Comment',
-                  populate: {path: 'user', model: 'User',select:'-password -roles -__v -movies -serials'}})
+      .populate({ path: 'comments', model: 'Comment',select :'-__v',
+                  populate: {path: 'user', model: 'User',select:'-password -roles -__v -movies -serials'}},)
       .populate('genre',{_id : 0,__v:0})
+      .populate({ path: 'votes', model: 'Rating', select :'-__v'})
         .then(serials => {
             res.send(serials);
         }).catch(err => {
@@ -19,8 +20,9 @@ exports.findAll = (req, res) => {
 // Find a single serial with a serialId
 exports.findOne = (req, res) => {
     Serial.findOne({id: req.params.serialsId})
-        .populate({ path: 'comments', model: 'Comment',
+        .populate({ path: 'comments', model: 'Comment', select :'-__v',
                     populate: {path: 'user', model: 'User',select:'-password -roles -__v -movies -serials'}})
+        .populate({ path: 'votes', model: 'Rating', select :'-__v'})
         .populate('genre',{_id : 0,__v:0})
         .lean()
         .then(serial => {

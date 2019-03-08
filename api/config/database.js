@@ -43,43 +43,48 @@ async function initial(){
         }
     });
 
-    let adminId;
-    let userId;
-
-    await Role.findOne({name:'USER'}).then(res => {
-        userId = res._id;
-    });
-
-    await Role.findOne({name:'ADMIN'}).then(res => {
-        adminId = res._id;
-    });
 
 
 
-    await User.countDocuments( (err, count) => {
-        if(!err && count === 0){
 
-            console.log("Init user admin.");
 
-            return new User({
-                username:   'root',
-                name:       'admin',
-                email:      'admin@gmail.com',
-                password:   bcrypt.hashSync("root", 8),
-                roles : [userId,adminId]
-            }).save()
-                .then(() => {
-                    console.log("ADMIN is added");
-                })
-                .catch(err => {
-                    return console.error(err.stack);
-                })
-        } else{
-            console.log("Admin already init");
-        }
 
-    });
+}
 
+async function insertAdmin() {
+  let adminId;
+  let userId;
+
+  await Role.findOne({name:'USER'}).then(res => {
+    userId = res._id;
+  });
+
+  await Role.findOne({name:'ADMIN'}).then(res => {
+    adminId = res._id;
+  });
+  await User.countDocuments( (err, count) => {
+    if(!err && count === 0){
+
+      console.log("Init user admin.");
+
+      return new User({
+        username:   'root',
+        name:       'admin',
+        email:      'admin@gmail.com',
+        password:   bcrypt.hashSync("root", 8),
+        roles : [userId,adminId]
+      }).save()
+        .then(() => {
+          console.log("ADMIN is added");
+        })
+        .catch(err => {
+          return console.error(err.stack);
+        })
+    } else{
+      console.log("Admin already init");
+    }
+
+  });
 }
 
 
@@ -138,6 +143,8 @@ async function insertSerial(serial) {
 
     await insertVideo(serial);
 
+    serial.votes = [];
+    serial.vote_average = 0;
     return new Serial(serial).save()
         .then(() => {
             console.log("Serial "+serial.name+" added");
@@ -205,6 +212,8 @@ async function insertMovie(movie) {
 
     await insertVideo(movie);
 
+    movie.votes = [];
+    movie.vote_average = 0;
     return new Movie(movie).save()
         .then(() => {
             console.log("Movie "+movie.title+" added");
@@ -296,11 +305,17 @@ const database = () => {
         .then(() => {
             console.log("Successfully connected to MongoDB.");
             initial().then(() => {
+              insertAdmin().then(() => {
                 getAllGenre().then(()=>{
-                    getAllMovie().then(() => {
-                      getAllSerial();
+                  getAllMovie().then(() => {
+                    getAllSerial().then(() => {
+                      console.log("######################################");
+                      console.log("DATABASE READY");
+                      console.log("######################################");
                     })
+                  })
                 });
+              });
             });
 
         })
